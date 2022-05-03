@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.dissertation">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Dissertation">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBz78w0LdSZV2nD_JO7PRzTiG-5u8yGPTk" />
+
+        <activity
+            android:name=".Results"
+            android:exported="false" />
+        <activity
+            android:name=".AccountVolunteer"
+            android:exported="false" />
+        <activity
+            android:name=".Constraints"
+            android:exported="false" />
+        <activity
+            android:name=".LoginVolunteer"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterVolunteer"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
