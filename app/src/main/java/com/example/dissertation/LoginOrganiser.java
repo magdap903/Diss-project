@@ -16,36 +16,35 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class LoginVolunteer extends AppCompatActivity {
+public class LoginOrganiser extends AppCompatActivity {
 
     EditText lEmail;
     EditText lPassword;
     Button login;
     Button register;
+
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_login_volunteer);
+        setContentView(R.layout.activity_login_organiser);
 
-        lEmail = findViewById(R.id.email_l);
-        lPassword = findViewById(R.id.password_l);
-        login = findViewById(R.id.login_b);
-        register = findViewById(R.id.log_reg);
+        lEmail = findViewById(R.id.email_lO);
+        lPassword = findViewById(R.id.password_lO);
+        login = findViewById(R.id.login_bO);
+        register = findViewById(R.id.log_regO);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), Results.class));
+            startActivity(new Intent(getApplicationContext(), FirstEvent.class));
             finish();
         }
 
@@ -55,12 +54,12 @@ public class LoginVolunteer extends AppCompatActivity {
                 String email = lEmail.getText().toString();
                 String password = lPassword.getText().toString();
 
-                if(isEmpty(email)){
+                if (isEmpty(email)) {
                     lEmail.setError("Email Required");
                     return;
                 }
 
-                if(isEmpty(password)){
+                if (isEmpty(password)) {
                     lPassword.setError("Password Required");
                     return;
                 }
@@ -68,49 +67,33 @@ public class LoginVolunteer extends AppCompatActivity {
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginVolunteer.this, "User signed in", Toast.LENGTH_SHORT).show();
-//                            userID = fAuth.getCurrentUser().getUid();
-//                            DocumentReference documentReference = fStore.collection("users").document(userID);
-//                            if ()
-//
-//                            String what = documentReference.getString("Organiser");
-
-
-
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginOrganiser.this, "User signed in", Toast.LENGTH_SHORT).show();
                             //startActivity(new Intent(getApplicationContext(), Constraints.class));
                             openResults();
 //                            openConstraints();
-                        }
-                        else{
-                            Toast.makeText(LoginVolunteer.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginOrganiser.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
-
-
             }
         });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){openVolunteerRegister();}
+            public void onClick(View v){openOrganiserRegister();}
         });
+
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, Results.class);
+        Intent intent = new Intent(this, FirstEvent.class);
         startActivity(intent);
     }
 
-    public void openConstraints() {
-        Intent intent = new Intent(this, FillConstraints.class);
-        startActivity(intent);
-    }
-
-    public void openVolunteerRegister() {
-        Intent intent = new Intent(this, RegisterVolunteer.class);
+    public void openOrganiserRegister() {
+        Intent intent = new Intent(this, RegisterOrganiser.class);
         startActivity(intent);
     }
 }

@@ -4,31 +4,40 @@ import static android.text.TextUtils.isEmpty;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-
+import androidx.fragment.app.DialogFragment;
+//import android.support.v4.app.DialogFragment;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,26 +45,53 @@ import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
-public class AccountVolunteer extends AppCompatActivity {
+public class FillConstraints extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    TextView firstName, lastName, email, dateFrom, dateTo, weekChoose;
+    TextView loc;
+//    LinearLayout layout;
+    Fragment address;
+    CheckBox checkBox;
+    SeekBar seekBar;
     Slider slider;
-    Spinner forms, types;
+    //TextView text;
     EditText age;
-    Button  chooseDates, signout;
-    LinearLayout dates, week;
-    CheckBox monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+    Spinner forms;
+    Spinner types;
+//    Button dateFrom;
+//    Button dateTo;
+    LinearLayout dates;
+    Button chooseDates;
+    TextView dateFrom;
+    TextView dateTo;
+    TextView weekChoose;
+    LinearLayout week;
+    CheckBox monday;
+    CheckBox tuesday;
+    CheckBox wednesday;
+    CheckBox thursday;
+    CheckBox friday;
+    CheckBox saturday;
+    CheckBox sunday;
     FloatingActionButton save;
+    Button signout;
     public static final String TAG = "TAG";
+
 
     String lat_lng;
     String placeid;
@@ -70,75 +106,50 @@ public class AccountVolunteer extends AppCompatActivity {
     FirebaseFirestore fStore;
 
     private String api = "AIzaSyBz78w0LdSZV2nD_JO7PRzTiG-5u8yGPTk";
-
+//    int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_volunteer);
+        setContentView(R.layout.activity_constraints);
 
-        firstName = findViewById(R.id.textView26);
-        lastName = findViewById(R.id.textView27);
-        email = findViewById(R.id.textView28);
-        slider = findViewById(R.id.sliderUP);
-        forms = findViewById(R.id.dropFormsUP);
-        age = findViewById(R.id.ageUP);
-        types = findViewById(R.id.dropTypeUP);
-        chooseDates = findViewById(R.id.chooseDatesUP);
-        dates = findViewById(R.id.datesUP);
-        dateFrom = findViewById(R.id.dateFrom1UP);
-        dateTo = findViewById(R.id.dateTo1UP);
-        week = findViewById(R.id.weekUP);
-        weekChoose = findViewById(R.id.textView36);
-        monday = findViewById(R.id.mondayUP);
-        tuesday = findViewById(R.id.tuesdayUP);
-        wednesday = findViewById(R.id.wednesdayUP);
-        thursday = findViewById(R.id.thursdayUP);
-        friday = findViewById(R.id.fridayUP);
-        saturday = findViewById(R.id.saturdayUP);
-        sunday = findViewById(R.id.sundayUP);
-        save = findViewById(R.id.saveUP);
-        signout = findViewById(R.id.signoutUP);
+//        LinearLayout layout = findViewById(R.id.lay);
+        loc = findViewById(R.id.textView9);
+//        address = findViewById(R.id.autocomp);
+        checkBox = findViewById(R.id.checkTravel);
+        seekBar = findViewById(R.id.seekTravel);
+        slider = findViewById(R.id.slider);
+        //text = findViewById(R.id.textView5);
+        age = findViewById(R.id.age);
+        forms = findViewById(R.id.dropForms);
+        types = findViewById(R.id.dropType);
+//        dateFrom = findViewById(R.id.dateFrom);
+//        dateTo = findViewById(R.id.dateTo1);
+        dates = findViewById(R.id.dates);
+        chooseDates = findViewById(R.id.chooseDates);
+        dateFrom = findViewById(R.id.dateFrom1);
+        dateTo = findViewById(R.id.dateTo1);
+        weekChoose = findViewById(R.id.textView15);
+        week = findViewById(R.id.week);
+        monday = findViewById(R.id.monday);
+        tuesday = findViewById(R.id.tuesday);
+        wednesday = findViewById(R.id.wednesday);
+        thursday = findViewById(R.id.thursday);
+        friday = findViewById(R.id.friday);
+        saturday = findViewById(R.id.saturday);
+        sunday = findViewById(R.id.sunday);
+        save = findViewById(R.id.save);
+        signout = findViewById(R.id.signout);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
         String[] formsOf = {"Animal Rescue", "Children and Youth", "Community Development", "Counselling",
-                "Education", "Environmental Work", "Fundraiser", "Healthcare Work",
-                "Sporting Events", "Wildlife Works", "Working with Elderly"};
+                            "Education", "Environmental Work", "Fundraiser", "Healthcare Work",
+                            "Sporting Events", "Wildlife Works", "Working with Elderly"};
         String[] typesOf = {"One-Time", "Regular"};
-
+//        String[] daysOfWeek = new String[7];
         ArrayList<String> daysOfWeek = new ArrayList<>(6);
-
-        userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = fStore.collection("users").document(userID);
-        DocumentReference documentReference1 = fStore.collection("volunteers").document(userID);
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot ds = task.getResult();
-                firstName.setText(ds.get("firstName").toString());
-                lastName.setText(ds.get("lastName").toString());
-                email.setText(ds.get("email").toString());
-            }
-        });
-
-
-        documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                 if(task.isSuccessful()){
-                     DocumentSnapshot doc = task.getResult();
-                     age.setText(doc.get("age").toString());
-                 }
-            }
-        });
-
-
-        //age.setText(doc.get(age).toString())
-
-
-
 
         // Set values for Form of Volunteering
         ArrayAdapter frm = new ArrayAdapter(this, android.R.layout.simple_spinner_item, formsOf);
@@ -154,7 +165,7 @@ public class AccountVolunteer extends AppCompatActivity {
         Places.initialize(getApplicationContext(), api);
         PlacesClient placesClient = Places.createClient(this);
 
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocompUP);
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomp);
 
         assert autocompleteFragment != null;
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
@@ -252,68 +263,70 @@ public class AccountVolunteer extends AppCompatActivity {
             }
         });
 
-        monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Monday");
+        {
+            monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Monday");
+                    }
                 }
-            }
-        });
+            });
 
-        tuesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Tuesday");
+            tuesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Tuesday");
+                    }
                 }
-            }
-        });
+            });
 
-        wednesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Wednesday");
+            wednesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Wednesday");
+                    }
                 }
-            }
-        });
+            });
 
-        thursday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Thursday");
+            thursday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Thursday");
+                    }
                 }
-            }
-        });
+            });
 
-        friday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Friday");
+            friday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Friday");
+                    }
                 }
-            }
-        });
+            });
 
-        saturday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Saturday");
+            saturday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Saturday");
+                    }
                 }
-            }
-        });
+            });
 
-        sunday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    daysOfWeek.add("Sunday");
+            sunday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        daysOfWeek.add("Sunday");
+                    }
                 }
-            }
-        });
+            });
+        }
 
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +339,18 @@ public class AccountVolunteer extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String ageStr = age.getText().toString();
+
+                if(isEmpty(lat_lng)){
+                    loc.setText("Please select location!");
+                    return;
+                }
+
+                if(isEmpty(ageStr)){
+                    age.setError("Age Required");
+                    return;
+                }
+
                 if(selectedType.equals("One-Time") && isEmpty(startDate)){
                     chooseDates.setError("Dates of Availability Required");
                     return;
@@ -338,14 +363,37 @@ public class AccountVolunteer extends AppCompatActivity {
                 }
 
                 userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+//                DocumentReference documentReference = fStore.collection("volunteers").document(userID);
+                Map<String,Object> user = new HashMap<>();
+                user.put("locationID", placeid);
+                user.put("lat_lng", lat_lng);
+                user.put("distance", distance);
+                user.put("formOfVolunteering", selectedForm);
+                user.put("age", ageStr);
+                user.put("typeOfVolunteering", selectedType);
+                user.put("startDate", startDate);
+                user.put("endDate", endDate);
+                user.put("daysOfTheWeek", daysOfWeek);
+
+//                documentReference
+                fStore.collection("volunteers").document(userID).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Constraints saved for " + userID);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Fail: " + e.toString());
+                    }
+                });
 
 
-
-
+                openResults();
             }
         });
 
-
+        // slider.setLabelFormatter();
     }
 
     private final Slider.OnSliderTouchListener touchListener = new Slider.OnSliderTouchListener() {
@@ -378,5 +426,34 @@ public class AccountVolunteer extends AppCompatActivity {
             distance = String.valueOf(val);
         }
     };
+
+
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+
+
+        String dateFromChosen = getDateFormat(day, month + 1, year);
+        dateFrom.setText(dateFromChosen);
+
+
+//        String dateFromChosen = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+
+//        dateFrom.setText(dateFromChosen);
+    }
+
+    private String getDateFormat(int day, int month, int year) {
+        return day + "/" + month + "/" + year;
+    }
+
+    public void openResults() {
+        Intent intent = new Intent(this, AccountVolunteer.class);
+        startActivity(intent);
+    }
+
+//    @Override
+//    public void
 
 }

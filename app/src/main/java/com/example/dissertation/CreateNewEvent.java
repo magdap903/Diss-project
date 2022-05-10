@@ -4,12 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Results extends AppCompatActivity {
+public class CreateNewEvent extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle("Matches");
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_create_new_event);
     }
 }

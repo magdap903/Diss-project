@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -60,7 +59,7 @@ public class RegisterVolunteer extends AppCompatActivity {
 
         // Check if user is signed in
         if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), Constraints.class));
+            startActivity(new Intent(getApplicationContext(), FillConstraints.class));
             finish();
         }
 
@@ -111,15 +110,16 @@ public class RegisterVolunteer extends AppCompatActivity {
 
 
 
-                // register user #1
+                // register user
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterVolunteer.this, "User Created", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("volunteers").document(userID);
+                            DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
+                            user.put("Organiser", false);
                             user.put("firstName", firstName);
                             user.put("lastName", lastName);
                             user.put("email", email);
@@ -162,7 +162,7 @@ public class RegisterVolunteer extends AppCompatActivity {
 
 
     public void openConstraints() {
-        Intent intent = new Intent(this, Constraints.class);
+        Intent intent = new Intent(this, FillConstraints.class);
         startActivity(intent);
     }
 

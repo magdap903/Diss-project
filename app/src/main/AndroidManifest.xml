@@ -9,6 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dissertation">
+        <activity
+            android:name=".CreateNewEvent"
+            android:exported="false" />
+        <activity
+            android:name=".DisplayEvents"
+            android:exported="false" />
+        <activity
+            android:name=".FirstEvent"
+            android:exported="false" />
+        <activity
+            android:name=".LoginOrganiser"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterOrganiser"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -21,7 +36,7 @@
             android:name=".AccountVolunteer"
             android:exported="false" />
         <activity
-            android:name=".Constraints"
+            android:name=".FillConstraints"
             android:exported="false" />
         <activity
             android:name=".LoginVolunteer"
