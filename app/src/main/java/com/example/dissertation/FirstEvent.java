@@ -148,7 +148,7 @@ public class FirstEvent extends AppCompatActivity {
             public void onPlaceSelected(@NonNull Place place) {
                 placeid = place.getId();
                 String lat_lng_CUT = String.valueOf(place.getLatLng());
-                lat_lng = lat_lng_CUT.substring(9);
+                lat_lng = lat_lng_CUT.substring(10, lat_lng_CUT.length()-1);
 
 
                 placeName = place.getName();

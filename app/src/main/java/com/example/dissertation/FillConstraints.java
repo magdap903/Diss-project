@@ -176,7 +176,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
             public void onPlaceSelected(@NonNull Place place) {
                 placeid = place.getId();
                 String lat_lng_CUT = String.valueOf(place.getLatLng());
-                lat_lng = lat_lng_CUT.substring(9);
+                lat_lng = lat_lng_CUT.substring(10, lat_lng_CUT.length()-1);
 
 
                 String placeName = place.getName();
@@ -449,7 +449,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, AccountVolunteer.class);
+        Intent intent = new Intent(this, DisplayMatches.class);
         startActivity(intent);
     }
 

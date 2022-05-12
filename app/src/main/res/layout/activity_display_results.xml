@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Results">
+    tools:context=".DisplayMatches">
 
     <ScrollView
     android:layout_width="match_parent"
@@ -13,17 +13,16 @@
     tools:layout_editor_absoluteX="1dp"
     tools:layout_editor_absoluteY="1dp">
 
-        <LinearLayout
+<!--        <TextView-->
+<!--            android:id="@+id/score"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Score" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/matchesRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content" />
 
-
-
-
-
-
-        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

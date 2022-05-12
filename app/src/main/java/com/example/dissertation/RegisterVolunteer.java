@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class RegisterVolunteer extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
+    String perm;
     public static final String TAG = "TAG";
 
     @Override
@@ -59,8 +61,28 @@ public class RegisterVolunteer extends AppCompatActivity {
 
         // Check if user is signed in
         if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), FillConstraints.class));
-            finish();
+
+//            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+//            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
+//            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        DocumentSnapshot doc = task.getResult();
+//                        perm = Objects.requireNonNull(doc.get("Organiser")).toString();
+//                    }
+//                }
+//            });
+//
+//            if(perm.equals("true")) {
+//                startActivity(new Intent(getApplicationContext(), DisplayEvents.class));
+//                Toast.makeText(RegisterVolunteer.this, "Access Denied - User is an Organiser", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//            else {
+                startActivity(new Intent(getApplicationContext(), FillConstraints.class));
+                finish();
+//            }
         }
 
 
@@ -119,7 +141,7 @@ public class RegisterVolunteer extends AppCompatActivity {
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
-                            user.put("Organiser", false);
+                            user.put("Organiser", "false");
                             user.put("firstName", firstName);
                             user.put("lastName", lastName);
                             user.put("email", email);

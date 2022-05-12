@@ -30,7 +30,7 @@
             android:value="AIzaSyBz78w0LdSZV2nD_JO7PRzTiG-5u8yGPTk" />
 
         <activity
-            android:name=".Results"
+            android:name=".DisplayMatches"
             android:exported="false" />
         <activity
             android:name=".AccountVolunteer"

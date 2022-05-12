@@ -33,6 +33,7 @@ public class EventRVAdapter extends RecyclerView.Adapter<EventRVAdapter.ViewHold
         holder.eventName.setText(events.getNameOfEvent());
         holder.eventDate.setText(events.getDateOfEvent());
         holder.eventLocation.setText(events.getLocationName());
+//        holder.eve
         holder.eventID.setText(events.getEventID());
 //        holder.days.setText((CharSequence) events.getDays());
     }

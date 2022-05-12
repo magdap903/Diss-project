@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginVolunteer extends AppCompatActivity {
@@ -45,7 +44,7 @@ public class LoginVolunteer extends AppCompatActivity {
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), Results.class));
+            startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
             finish();
         }
 
@@ -100,7 +99,7 @@ public class LoginVolunteer extends AppCompatActivity {
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, Results.class);
+        Intent intent = new Intent(this, DisplayMatches.class);
         startActivity(intent);
     }
 

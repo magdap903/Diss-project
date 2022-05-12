@@ -1,22 +1,26 @@
 package com.example.dissertation;
 
-import java.util.ArrayList;
+public class Matches {
 
-public class Events {
-
-    private String nameOfEvent, dateOfEvent, locationName, lat_lng, formOfVolunteering, eventID;
+    private String nameOfEvent, dateOfEvent, locationName, lat_lng, distance, ageMin, ageMax, formOfVolunteering, eventID;
 //    private ArrayList days;
+    private int score;
 
-    public Events() {}
+    public Matches() {}
 
-    public Events(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng,
-                  String formOfVolunteering, String eventID) {
+    public Matches(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng,
+                  String distance, String ageMin, String ageMax, String formOfVolunteering, String eventID, int score) {
         this.nameOfEvent = nameOfEvent;
         this.dateOfEvent = dateOfEvent;
         this.locationName = locationName;
         this.lat_lng = lat_lng;
+        this.distance = distance;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
         this.formOfVolunteering = formOfVolunteering;
         this.eventID = eventID;
+        this.score = score;
+
 //        this.days = days;
 
     }
@@ -53,6 +57,30 @@ public class Events {
         this.lat_lng = lat_lng;
     }
 
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getAgeMin() {
+        return ageMin;
+    }
+
+    public void setAgeMin(String ageMin) {
+        this.ageMin = ageMin;
+    }
+
+    public String getAgeMax() {
+        return ageMax;
+    }
+
+    public void setAgeMax(String ageMax) {
+        this.ageMax = ageMax;
+    }
+
     public String getFormOfVolunteering() {
         return formOfVolunteering;
     }
@@ -69,13 +97,14 @@ public class Events {
         this.eventID = eventID;
     }
 
-//    public ArrayList getDays() {
-//        return days;
-//    }
-//
-//    public void setDays(ArrayList days) {
-//        this.days = days;
-//    }
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
 
 
 }
