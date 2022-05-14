@@ -4,12 +4,12 @@ public class Matches {
 
     private String nameOfEvent, dateOfEvent, locationName, lat_lng, distance, ageMin, ageMax, formOfVolunteering, eventID;
 //    private ArrayList days;
-    private int score;
+    private String score;
 
     public Matches() {}
 
     public Matches(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng,
-                  String distance, String ageMin, String ageMax, String formOfVolunteering, String eventID, int score) {
+                  String distance, String ageMin, String ageMax, String formOfVolunteering, String eventID, String score) {
         this.nameOfEvent = nameOfEvent;
         this.dateOfEvent = dateOfEvent;
         this.locationName = locationName;
@@ -97,11 +97,11 @@ public class Matches {
         this.eventID = eventID;
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

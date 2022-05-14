@@ -47,7 +47,8 @@ import java.util.Objects;
 
 public class AccountVolunteer extends AppCompatActivity {
 
-    TextView firstName, lastName, email, dateFrom, dateTo, weekChoose;
+    TextView firstName, lastName, email;
+    TextView dateFrom, dateTo, weekChoose;
     Slider slider;
     Spinner forms, types;
     EditText age;

@@ -44,7 +44,7 @@ public class LoginVolunteer extends AppCompatActivity {
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
+            startActivity(new Intent(getApplicationContext(), DisplayMatches1.class));
             finish();
         }
 
@@ -99,7 +99,7 @@ public class LoginVolunteer extends AppCompatActivity {
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, DisplayMatches.class);
+        Intent intent = new Intent(this, DisplayMatches1.class);
         startActivity(intent);
     }
 

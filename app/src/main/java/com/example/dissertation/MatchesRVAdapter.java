@@ -34,7 +34,7 @@ public class MatchesRVAdapter extends RecyclerView.Adapter<MatchesRVAdapter.View
         holder.matchName.setText(matches.getNameOfEvent());
         holder.matchDate.setText(matches.getDateOfEvent());
         holder.matchLocation.setText(matches.getLocationName());
-        holder.matchDistance.setText(matches.getDistance());
+        holder.matchDistance.setText(String.valueOf((int) Math.round(Double.parseDouble(matches.getDistance()))));
         holder.matchForm.setText(matches.getFormOfVolunteering());
         holder.matchScore.setText(matches.getScore());
 

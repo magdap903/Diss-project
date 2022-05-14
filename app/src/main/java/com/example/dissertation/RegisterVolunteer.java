@@ -80,7 +80,7 @@ public class RegisterVolunteer extends AppCompatActivity {
 //                finish();
 //            }
 //            else {
-                startActivity(new Intent(getApplicationContext(), FillConstraints.class));
+                startActivity(new Intent(getApplicationContext(), DisplayMatches1.class));
                 finish();
 //            }
         }

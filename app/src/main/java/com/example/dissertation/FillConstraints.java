@@ -449,7 +449,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, DisplayMatches.class);
+        Intent intent = new Intent(this, DisplayMatches1.class);
         startActivity(intent);
     }
 
