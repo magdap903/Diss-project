@@ -228,7 +228,7 @@ public class DisplayMatches extends AppCompatActivity {
                                 dis = (locationV.distanceTo(locationE)) / 1000;
                             }
                             else {
-                                dis = 69;
+                                dis = 13;
                             }
 
 
