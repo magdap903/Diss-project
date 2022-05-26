@@ -11,16 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dissertation">
         <activity
-            android:name=".DisplayMatches1"
+            android:name=".ApplySuccess"
             android:exported="false" />
         <activity
-            android:name=".CreateNewEvent"
+            android:name=".EventInfo"
             android:exported="false" />
         <activity
             android:name=".DisplayEvents"
             android:exported="false" />
         <activity
-            android:name=".FirstEvent"
+            android:name=".NewEvent"
             android:exported="false" />
         <activity
             android:name=".LoginOrganiser"

@@ -37,7 +37,7 @@ public class RegisterOrganiser extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    String perm;
+    boolean perm;
     public static final String TAG = "TAG";
 
     @Override
@@ -57,27 +57,27 @@ public class RegisterOrganiser extends AppCompatActivity {
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-//            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-//            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
-//            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if(task.isSuccessful()){
-//                        DocumentSnapshot doc = task.getResult();
-//                        perm = Objects.requireNonNull(doc.get("Organiser")).toString();
-//                    }
-//                }
-//            });
-//
-//            if(perm.equals("false")) {
-//                startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
-//                Toast.makeText(RegisterOrganiser.this, "Access Denied - User is a Volunteer", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//            else {
+            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
+            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        perm = (boolean) doc.get("Organizer");
+                    }
+                }
+            });
+
+            if(!perm) {
+                startActivity(new Intent(getApplicationContext(), LoginVolunteer.class));
+                Toast.makeText(RegisterOrganiser.this, "Access Denied - User is a Volunteer", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            else {
                 startActivity(new Intent(getApplicationContext(), DisplayEvents.class));
                 finish();
-//            }
+            }
         }
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +110,7 @@ public class RegisterOrganiser extends AppCompatActivity {
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String, Object> user = new HashMap<>();
-                            user.put("Organiser", "false");
+                            user.put("Organizer", true);
                             user.put("organisationName", organName);
                             user.put("email", email);
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -147,7 +147,7 @@ public class RegisterOrganiser extends AppCompatActivity {
     }
 
     public void openFirstEvent() {
-        Intent intent = new Intent(this, FirstEvent.class);
+        Intent intent = new Intent(this, DisplayEvents.class);
         startActivity(intent);
     }
 

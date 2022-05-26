@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class FirstEvent extends AppCompatActivity {
+public class NewEvent extends AppCompatActivity {
 
     EditText nameEvent;
     TextView loc;
@@ -84,7 +84,8 @@ public class FirstEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first_event);
+        getSupportActionBar().setTitle("New Event");
+        setContentView(R.layout.activity_new_event);
 
         nameEvent = findViewById(R.id.nameEvent);
         loc = findViewById(R.id.textView17);
@@ -370,7 +371,7 @@ public class FirstEvent extends AppCompatActivity {
                 event.put("typeOfVolunteering", selectedType);
                 event.put("dateOfEvent", chosenDate);
                 event.put("daysOfTheWeek", daysOfWeek);
-                event.put("organisationID", userID);
+                event.put("organisationID", userID);;
 
 //                fStore.collection("users").document(userID).collection("events").document(nameOfEvent).set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
 //                                fStore.collection("events").document(nameOfEvent).set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -385,6 +386,8 @@ public class FirstEvent extends AppCompatActivity {
 //                        Log.d(TAG, "Fail: " + e.toString());
 //                    }
 //                });
+
+                // save event
                 fStore.collection("events").add(event).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -400,7 +403,15 @@ public class FirstEvent extends AppCompatActivity {
                         fStore.collection("users").document(userID).collection("events").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "Event saved for " + userID);
+                                Map<String, Object> eventI = new HashMap<>();
+                                eventI.put("eventID", eventID);
+
+                                fStore.collection("events").document(eventID).update(eventI).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "Event saved for " + userID);
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

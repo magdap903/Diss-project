@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#59BFBFBF"
     tools:context=".DisplayEvents">
 
     <LinearLayout
@@ -11,20 +12,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView37"
+        <LinearLayout
+            android:id="@+id/layev"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/signoutEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="30dp"
+            android:background="@drawable/buttons" />
+
+        <TextView
+            android:id="@+id/eventsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="No events found. Create a new one."
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/layev">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventsRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
+    </RelativeLayout>
     </LinearLayout>
-
-
-
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@null"
+        android:clickable="true"
+        android:focusable="true"
+        app:maxImageSize="70dp"
+        app:srcCompat="@drawable/ic_newevent_foreground" />
 
 </RelativeLayout>

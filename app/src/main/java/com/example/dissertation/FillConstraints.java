@@ -4,7 +4,6 @@ import static android.text.TextUtils.isEmpty;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 //import android.support.v4.app.DialogFragment;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -34,30 +33,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -94,6 +85,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
 
 
     String lat_lng;
+    String placeName;
     String placeid;
     String distance;
     String selectedForm;
@@ -111,6 +103,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Constraints");
         setContentView(R.layout.activity_constraints);
 
 //        LinearLayout layout = findViewById(R.id.lay);
@@ -161,7 +154,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
         tp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         types.setAdapter(tp);
 
-        // GOOGLE MAPS
+        // Location
         Places.initialize(getApplicationContext(), api);
         PlacesClient placesClient = Places.createClient(this);
 
@@ -177,9 +170,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
                 placeid = place.getId();
                 String lat_lng_CUT = String.valueOf(place.getLatLng());
                 lat_lng = lat_lng_CUT.substring(10, lat_lng_CUT.length()-1);
-
-
-                String placeName = place.getName();
+                placeName = place.getName();
                 autocompleteFragment.setText(placeName);
             }
 
@@ -346,6 +337,11 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
                     return;
                 }
 
+                int ageInt = Integer.parseInt(ageStr);
+                if(ageInt > 100 || ageInt <= 0) {
+                    age.setError("Please provide a valid age");
+                }
+
                 if(isEmpty(ageStr)){
                     age.setError("Age Required");
                     return;
@@ -362,10 +358,12 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
                     return;
                 }
 
+                // save constraints
                 userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-//                DocumentReference documentReference = fStore.collection("volunteers").document(userID);
+
                 Map<String,Object> user = new HashMap<>();
                 user.put("locationID", placeid);
+                user.put("locationName", placeName);
                 user.put("lat_lng", lat_lng);
                 user.put("distance", distance);
                 user.put("formOfVolunteering", selectedForm);
@@ -375,7 +373,6 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
                 user.put("endDate", endDate);
                 user.put("daysOfTheWeek", daysOfWeek);
 
-//                documentReference
                 fStore.collection("volunteers").document(userID).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -408,7 +405,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
                     float vl = slider.getValue();
                     int vlu = (int) vl;
 
-                    if(vlu==200){
+                    if(vlu==500){
                         return vlu + "+km";
                     }
                     else {
@@ -449,7 +446,7 @@ public class FillConstraints extends AppCompatActivity implements DatePickerDial
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, DisplayMatches1.class);
+        Intent intent = new Intent(this, DisplayMatches.class);
         startActivity(intent);
     }
 

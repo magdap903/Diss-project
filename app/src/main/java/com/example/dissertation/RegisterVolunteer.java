@@ -29,8 +29,6 @@ import java.util.Objects;
 
 public class RegisterVolunteer extends AppCompatActivity {
 
-//    FirebaseFirestore db = Firebase
-
     EditText rFirstName;
     EditText rLastName;
     EditText rEmail;
@@ -40,7 +38,7 @@ public class RegisterVolunteer extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    String perm;
+    boolean perm;
     public static final String TAG = "TAG";
 
     @Override
@@ -62,37 +60,36 @@ public class RegisterVolunteer extends AppCompatActivity {
         // Check if user is signed in
         if(fAuth.getCurrentUser() != null){
 
-//            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-//            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
-//            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if(task.isSuccessful()){
-//                        DocumentSnapshot doc = task.getResult();
-//                        perm = Objects.requireNonNull(doc.get("Organiser")).toString();
-//                    }
-//                }
-//            });
-//
-//            if(perm.equals("true")) {
-//                startActivity(new Intent(getApplicationContext(), DisplayEvents.class));
-//                Toast.makeText(RegisterVolunteer.this, "Access Denied - User is an Organiser", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//            else {
-                startActivity(new Intent(getApplicationContext(), DisplayMatches1.class));
+            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
+            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        perm = (boolean) doc.get("Organizer");
+                    }
+                }
+            });
+
+            if(perm) {
+                startActivity(new Intent(getApplicationContext(), LoginOrganiser.class));
+                Toast.makeText(RegisterVolunteer.this, "Access Denied - User is an Organiser", Toast.LENGTH_LONG).show();
                 finish();
-//            }
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
+                finish();
+            }
         }
 
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
-            //public void onClick(View v) {openConstraints();}
             public void onClick(View v) {
                 String firstName = rFirstName.getText().toString();
                 String lastName = rLastName.getText().toString();
-                String email = rEmail.getText().toString(); //.trim()?
+                String email = rEmail.getText().toString();
                 String password = rPassword.getText().toString();
 
                 if(isEmpty(firstName)){
@@ -114,23 +111,6 @@ public class RegisterVolunteer extends AppCompatActivity {
                     rPassword.setError("Password Required");
                     return;
                 }
-                //password characters min ?
-
-
-//                // Register User
-//                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new onCompleteListener<AuthResult() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()) {
-//                            // Sign in success, update UI with user info
-//                            Log.d(TAG, "Success");
-//                            FirebaseUser user = fAuth.getCurrentUser();
-//                            updateUI(user);
-//                        }
-//                    }
-//                        }
-
-
 
                 // register user
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -141,7 +121,7 @@ public class RegisterVolunteer extends AppCompatActivity {
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
-                            user.put("Organiser", "false");
+                            user.put("Organizer", false);
                             user.put("firstName", firstName);
                             user.put("lastName", lastName);
                             user.put("email", email);
@@ -157,17 +137,13 @@ public class RegisterVolunteer extends AppCompatActivity {
                                 }
                             });
                             openConstraints();
-                            //startActivity(new Intent(getApplicationContext(), Constraints.class));
+                            //startActivity(new Intent(getApplicationContext(), Constraints.class));S
                         }
                         else {
                             Toast.makeText(RegisterVolunteer.this, "Error" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 });
-
-
             }
         });
 
@@ -176,12 +152,6 @@ public class RegisterVolunteer extends AppCompatActivity {
             public void onClick(View v){openVolunteerLogin();}
         });
     }
-
-//    private void Register(){
-//        String email = rEmail.getText().toString();
-//        String password = rPassword.getText().toString();
-//    }
-
 
     public void openConstraints() {
         Intent intent = new Intent(this, FillConstraints.class);

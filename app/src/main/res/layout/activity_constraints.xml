@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#59BFBFBF"
     tools:context=".FillConstraints">
 
     <ScrollView
@@ -27,6 +28,7 @@
                 android:layout_gravity="right"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:background="@drawable/buttons"
                 android:text="SignOut"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,8 +65,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40sp"
                 android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="10sp"
                 android:background="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
@@ -126,13 +128,12 @@
                 android:stepSize="5"
                 android:value="20"
                 android:valueFrom="0"
-                android:valueTo="200"
+                android:valueTo="500"
                 app:labelBehavior="floating"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10"
-                 />
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -241,8 +242,8 @@
                 android:layout_height="40dp"
                 android:layout_margin="20dp"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/dateFrom1"
@@ -326,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" >
+                app:layout_constraintTop_toBottomOf="@+id/textView15">
 
                 <CheckBox
                     android:id="@+id/monday"
@@ -392,24 +393,21 @@
 
 
             </LinearLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginBottom="30dp"
-                android:backgroundTint="@null"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.954"
-                app:layout_constraintStart_toStartOf="parent"
-                app:maxImageSize="30dp"
-                app:srcCompat="@android:drawable/ic_menu_save" />
-
-
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@null"
+        android:clickable="true"
+        android:focusable="true"
+        app:maxImageSize="30dp"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
 </RelativeLayout>

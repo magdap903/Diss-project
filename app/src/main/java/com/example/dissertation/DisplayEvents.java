@@ -1,18 +1,23 @@
 package com.example.dissertation;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,11 +33,18 @@ public class DisplayEvents extends AppCompatActivity {
     private ArrayList<Events> eventsArrayList;
     private EventRVAdapter eventRVAdapter;
 
+    TextView eventsText, moreInfo;
+    FloatingActionButton addNew;
+    ImageButton edit, delete;
+    Button signout;
+
+    String typeE;
+    ArrayList days = new ArrayList();
+
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
 
     String userID;
-    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +53,12 @@ public class DisplayEvents extends AppCompatActivity {
         setContentView(R.layout.activity_display_events);
 
         eventRV = findViewById(R.id.eventsRV);
-        text = findViewById(R.id.textView37);
+        eventsText = findViewById(R.id.eventsText);
+        addNew = findViewById(R.id.addEvent);
+        moreInfo = findViewById(R.id.CVmoreInfo);
+        edit = findViewById(R.id.editEvent);
+        delete = findViewById(R.id.deleteEvent);
+        signout = findViewById(R.id.signoutEvent);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -66,8 +83,9 @@ public class DisplayEvents extends AppCompatActivity {
         eventRVAdapter = new EventRVAdapter(eventsArrayList, this);
         eventRV.setAdapter(eventRVAdapter);
 
-        fStore.collection("users").document(userID).collection("events").get()
+        fStore.collection("events").whereEqualTo("organisationID", userID).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if(!queryDocumentSnapshots.isEmpty()) {
@@ -76,12 +94,29 @@ public class DisplayEvents extends AppCompatActivity {
                                 Events e = d.toObject(Events.class);
 
                                 eventsArrayList.add(e);
+                                eventsArrayList.forEach(event -> {
+
+                                    typeE = event.getTypeOfVolunteering();
+                                    days = event.getDaysOfTheWeek();
+
+                                    if(typeE.equals("Regular")) {
+                                        event.setDateOfEvent(days.toString());
+                                    }
+
+                                });
                             }
+                            int numberOfEvents = eventsArrayList.size();
+                            if(numberOfEvents != 1) {
+                                eventsText.setText(numberOfEvents + " events found");
+                            }
+                            else{
+                                eventsText.setText(numberOfEvents + " event found");
+                            }
+
                             eventRVAdapter.notifyDataSetChanged();
-                            text.setText(eventsArrayList.toString());
                         }
-                        else {
-                            Toast.makeText(DisplayEvents.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+                        else{
+                            eventsText.setText("No events found. Create a new event");
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -91,6 +126,29 @@ public class DisplayEvents extends AppCompatActivity {
             }
         });
 
+//        moreInfo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), EventInfo.class);
+//                startActivity(intent);
+//            }
+//        });
+
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NewEvent.class);
+                startActivity(intent);
+            }
+        });
+
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
 
     }
 }

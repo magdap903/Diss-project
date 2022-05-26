@@ -16,7 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class LoginOrganiser extends AppCompatActivity {
 
@@ -27,6 +31,8 @@ public class LoginOrganiser extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+
+    boolean perm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,27 @@ public class LoginOrganiser extends AppCompatActivity {
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), FirstEvent.class));
-            finish();
+            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
+            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        perm = doc.getBoolean("Organizer");
+                    }
+                }
+            });
+
+            if(perm) {
+                startActivity(new Intent(getApplicationContext(), LoginVolunteer.class));
+                Toast.makeText(LoginOrganiser.this, "Access Denied - User is an Organiser", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), DisplayEvents.class));
+                finish();
+            }
         }
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +94,7 @@ public class LoginOrganiser extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginOrganiser.this, "User signed in", Toast.LENGTH_SHORT).show();
-                            //startActivity(new Intent(getApplicationContext(), Constraints.class));
                             openResults();
-//                            openConstraints();
                         } else {
                             Toast.makeText(LoginOrganiser.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -88,7 +111,7 @@ public class LoginOrganiser extends AppCompatActivity {
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, FirstEvent.class);
+        Intent intent = new Intent(this, NewEvent.class);
         startActivity(intent);
     }
 

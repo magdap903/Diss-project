@@ -16,7 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class LoginVolunteer extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class LoginVolunteer extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
+    boolean perm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,27 @@ public class LoginVolunteer extends AppCompatActivity {
 
         //Check if user is signed in
         if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), DisplayMatches1.class));
-            finish();
+            String userIDRegistered = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+            DocumentReference drRegistered = fStore.collection("users").document(userIDRegistered);
+            drRegistered.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        perm = doc.getBoolean("Organizer");
+                    }
+                }
+            });
+
+            if(perm) {
+                startActivity(new Intent(getApplicationContext(), LoginOrganiser.class));
+                Toast.makeText(LoginVolunteer.this, "Access Denied - User is an Organiser", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
+                finish();
+            }
         }
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +123,7 @@ public class LoginVolunteer extends AppCompatActivity {
     }
 
     public void openResults() {
-        Intent intent = new Intent(this, DisplayMatches1.class);
+        Intent intent = new Intent(this, DisplayMatches.class);
         startActivity(intent);
     }
 

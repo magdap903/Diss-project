@@ -9,25 +9,25 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
-    Button button2;
+    Button volunteer;
+    Button organizer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-        button = findViewById(R.id.button);
-        button2 = findViewById(R.id.button2);
+        volunteer = findViewById(R.id.button);
+        organizer = findViewById(R.id.button2);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        volunteer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openVolunteerRegister();
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        organizer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openOrganiserRegister();

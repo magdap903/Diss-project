@@ -18,7 +18,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
@@ -43,28 +45,37 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AccountVolunteer extends AppCompatActivity {
 
-    TextView firstName, lastName, email;
+    TextView firstName, lastName, email, locationAcc, distanceAcc, formAcc, ageAcc, typeAcc;
     TextView dateFrom, dateTo, weekChoose;
+    Switch  switchLocation, switchDistance, switchForm, switchType, switchDates, switchWeek;
     Slider slider;
     Spinner forms, types;
-    EditText age;
     Button  chooseDates, signout;
-    LinearLayout dates, week;
+    LinearLayout locLay, week;
+    RelativeLayout dates;
     CheckBox monday, tuesday, wednesday, thursday, friday, saturday, sunday;
     FloatingActionButton save;
     public static final String TAG = "TAG";
 
     String lat_lng;
+    String placeName;
     String placeid;
     String distance;
     String selectedForm;
     String selectedType;
+    String typeDB;
+    String startDateDB;
+    String endDateDB;
     String startDate;
     String endDate;
+    String daysOfWeekDB;
+    String daysWeekStr;
+    String daysWeekStr1;
 
     String userID;
     FirebaseAuth fAuth;
@@ -76,14 +87,28 @@ public class AccountVolunteer extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Account");
         setContentView(R.layout.activity_account_volunteer);
 
         firstName = findViewById(R.id.textView26);
         lastName = findViewById(R.id.textView27);
         email = findViewById(R.id.textView28);
+        locationAcc = findViewById(R.id.locationAcc);
+        distanceAcc = findViewById(R.id.distanceAcc);
+        formAcc = findViewById(R.id.formAcc);
+        ageAcc = findViewById(R.id.ageAcc);
+        typeAcc = findViewById(R.id.typeAcc);
+
+        switchLocation = findViewById(R.id.switchLocation);
+        switchDistance = findViewById(R.id.switchDistance);
+        switchForm = findViewById(R.id.switchForm);
+        switchType = findViewById(R.id.switchType);
+        switchDates = findViewById(R.id.switchDates);
+        switchWeek = findViewById(R.id.switchWeek);
+
+        locLay = findViewById(R.id.layUP);
         slider = findViewById(R.id.sliderUP);
         forms = findViewById(R.id.dropFormsUP);
-        age = findViewById(R.id.ageUP);
         types = findViewById(R.id.dropTypeUP);
         chooseDates = findViewById(R.id.chooseDatesUP);
         dates = findViewById(R.id.datesUP);
@@ -113,33 +138,181 @@ public class AccountVolunteer extends AppCompatActivity {
 
         userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         DocumentReference documentReference = fStore.collection("users").document(userID);
-        DocumentReference documentReference1 = fStore.collection("volunteers").document(userID);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot ds = task.getResult();
-                firstName.setText(ds.get("firstName").toString());
-                lastName.setText(ds.get("lastName").toString());
+                String fName = ds.get("firstName").toString();
+                String lName = ds.get("lastName").toString();
+                firstName.setText(fName + " " + lName);
+//                lastName.setText();
                 email.setText(ds.get("email").toString());
             }
         });
 
-
+        DocumentReference documentReference1 = fStore.collection("volunteers").document(userID);
         documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                  if(task.isSuccessful()){
                      DocumentSnapshot doc = task.getResult();
-                     age.setText(doc.get("age").toString());
+                     locationAcc.setText(doc.get("locationName").toString());
+                     distanceAcc.setText(doc.get("distance").toString());
+                     formAcc.setText(doc.get("formOfVolunteering").toString());
+                     ageAcc.setText(doc.get("age").toString());
+                     typeDB = doc.get("typeOfVolunteering").toString();
+                     typeAcc.setText(typeDB);
+                     if(typeDB == "One-Time") {
+                         startDateDB = doc.get("startDate").toString();
+                         endDateDB = doc.get("endDate").toString();
+
+                         dates.setVisibility(View.VISIBLE);
+                         weekChoose.setVisibility(View.GONE);
+                         week.setVisibility(View.GONE);
+                         monday.setChecked(false);
+                         tuesday.setChecked(false);
+                         wednesday.setChecked(false);
+                         thursday.setChecked(false);
+                         friday.setChecked(false);
+                         saturday.setChecked(false);
+                         sunday.setChecked(false);
+                         daysOfWeek.clear();
+
+                         dateFrom.setText(startDateDB);
+                         dateTo.setText(endDateDB);
+                     }
+                     else if(typeDB == "Regular"){
+                         daysOfWeekDB = doc.get("daysOfTheWeek").toString();
+                         daysWeekStr = "Your chosen days of the week are: " + daysOfWeekDB;
+                         daysWeekStr1 = daysWeekStr + "\nPlease choose new ones.";
+
+                         chooseDates.setVisibility(View.GONE);
+                         dates.setVisibility(View.GONE);
+                         weekChoose.setVisibility(View.VISIBLE);
+                         week.setVisibility(View.VISIBLE);
+                         startDate = null;
+                         endDate = null;
+                         weekChoose.setText(daysWeekStr);
+                     }
+
                  }
             }
         });
 
+        if(typeDB == "One-Time"){
+//            chooseDates.setVisibility(View.VISIBLE);
+            dates.setVisibility(View.VISIBLE);
+            weekChoose.setVisibility(View.GONE);
+            week.setVisibility(View.GONE);
+            monday.setChecked(false);
+            tuesday.setChecked(false);
+            wednesday.setChecked(false);
+            thursday.setChecked(false);
+            friday.setChecked(false);
+            saturday.setChecked(false);
+            sunday.setChecked(false);
+            daysOfWeek.clear();
 
-        //age.setText(doc.get(age).toString())
+            dateFrom.setText(startDateDB);
+            dateTo.setText(endDateDB);
+        }
+        else if(typeDB == "Regular"){
 
+            chooseDates.setVisibility(View.GONE);
+            dates.setVisibility(View.GONE);
+            weekChoose.setVisibility(View.VISIBLE);
+            week.setVisibility(View.VISIBLE);
+            startDate = null;
+            endDate = null;
+            weekChoose.setText(daysWeekStr);
+        }
 
+        switchLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    locLay.setVisibility(View.VISIBLE);
+                }
+                else {
+                    locLay.setVisibility(View.GONE);
+                }
+            }
+        });
 
+        switchDistance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    slider.setVisibility(View.VISIBLE);
+                }
+                else {
+                    slider.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        switchForm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    forms.setVisibility(View.VISIBLE);
+                }
+                else {
+                    forms.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        switchType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    types.setVisibility(View.VISIBLE);
+
+                }
+                else {
+                    types.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        switchDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    chooseDates.setVisibility(View.VISIBLE);
+                }
+                else {
+                    chooseDates.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        switchWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    weekChoose.setText(daysWeekStr1);
+                    monday.setVisibility(View.VISIBLE);
+                    tuesday.setVisibility(View.VISIBLE);
+                    wednesday.setVisibility(View.VISIBLE);
+                    thursday.setVisibility(View.VISIBLE);
+                    friday.setVisibility(View.VISIBLE);
+                    saturday.setVisibility(View.VISIBLE);
+                    sunday.setVisibility(View.VISIBLE);
+
+                }
+                else {
+                    monday.setVisibility(View.GONE);
+                    tuesday.setVisibility(View.GONE);
+                    wednesday.setVisibility(View.GONE);
+                    thursday.setVisibility(View.GONE);
+                    friday.setVisibility(View.GONE);
+                    saturday.setVisibility(View.GONE);
+                    sunday.setVisibility(View.GONE);
+                }
+            }
+        });
 
         // Set values for Form of Volunteering
         ArrayAdapter frm = new ArrayAdapter(this, android.R.layout.simple_spinner_item, formsOf);
@@ -166,10 +339,10 @@ public class AccountVolunteer extends AppCompatActivity {
             public void onPlaceSelected(@NonNull Place place) {
                 placeid = place.getId();
                 String lat_lng_CUT = String.valueOf(place.getLatLng());
-                lat_lng = lat_lng_CUT.substring(9);
+                lat_lng = lat_lng_CUT.substring(10, lat_lng_CUT.length()-1);
 
 
-                String placeName = place.getName();
+                placeName = place.getName();
                 autocompleteFragment.setText(placeName);
             }
 
@@ -188,9 +361,7 @@ public class AccountVolunteer extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
         types.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -327,21 +498,51 @@ public class AccountVolunteer extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selectedType.equals("One-Time") && isEmpty(startDate)){
-                    chooseDates.setError("Dates of Availability Required");
-                    return;
-                }
-
-                boolean empt = daysOfWeek.isEmpty();
-                if(selectedType.equals("Regular") && empt){
-                    weekChoose.setText("Please select at least one option!");
-                    return;
-                }
+//                if(selectedType.equals("One-Time") && isEmpty(startDate)){
+//                    chooseDates.setError("Dates of Availability Required");
+//                    return;
+//                }
+//
+//                boolean empt = daysOfWeek.isEmpty();
+//                if(selectedType.equals("Regular") && empt){
+//                    weekChoose.setText("Please select at least one option!");
+//                    return;
+//                }
 
                 userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
 
+                if(switchLocation.isChecked()){
+                    fStore.collection("volunteers").document(userID)
+                            .update("locationID", placeid,
+                            "lat_lng", lat_lng,
+                                    "locationName", placeName);
+                }
 
+                if(switchDistance.isChecked()){
+                    fStore.collection("volunteers").document(userID).update("distance", distance);
+                }
 
+                if(switchForm.isChecked()){
+                    fStore.collection("volunteers").document(userID).update("formOfVolunteering", selectedForm);
+                }
+
+                if(switchType.isChecked()){
+                    fStore.collection("volunteers").document(userID).update("typeOfVolunteering", selectedType);
+                }
+
+                if(switchDates.isChecked()){
+                    fStore.collection("volunteers").document(userID).update("startDate", startDate,
+                                                                                        "endDate", endDate,
+                                                                                        "daysOfTheWeek", null);
+                }
+
+                if(switchWeek.isChecked()){
+                    fStore.collection("volunteers").document(userID).update("daysOfTheWeek", daysOfWeek,
+                                                                                        "startDate", null,
+                                                                                        "endDate", null);
+                }
+
+                startActivity(new Intent(getApplicationContext(), DisplayMatches.class));
 
             }
         });

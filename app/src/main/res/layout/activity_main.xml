@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#59BFBFBF"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,6 +17,7 @@
         android:textAlignment="center"
         android:textSize="40sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,28 +27,21 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="307dp"
+        android:layout_width="340dp"
         android:layout_height="75dp"
-        android:background="#807AA3"
-        android:text="VOLUNTEER"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/buttons"
+        android:text="I am a Volunteer"
+        android:textSize="25sp"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="307dp"
-        android:layout_height="75dp"
-        android:background="#807AA3"
-        android:text="ORGANISER"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.086" />
+        android:layout_width="340dp"
+        android:layout_height="78dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/buttons"
+        android:text="I am an Organizer"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-    <!--app:backgroundTint="@null" -->
+</LinearLayout>

@@ -1,25 +1,34 @@
 package com.example.dissertation;
 
+import java.util.ArrayList;
+
 public class Matches {
 
-    private String nameOfEvent, dateOfEvent, locationName, lat_lng, distance, ageMin, ageMax, formOfVolunteering, eventID;
-//    private ArrayList days;
+    private String nameOfEvent, dateOfEvent, locationName, lat_lng, distance, age, ageMin, ageMax,
+            formOfVolunteering, eventID, typeOfVolunteering, numberOfVolunteers;
+    private ArrayList<String> days;
     private String score;
 
     public Matches() {}
 
     public Matches(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng,
-                  String distance, String ageMin, String ageMax, String formOfVolunteering, String eventID, String score) {
+                  String distance, String age, String ageMin, String ageMax, String formOfVolunteering,
+                   String eventID, String score, ArrayList<String> days, String typeOfVolunteering, String numberOfVolunteers) {
         this.nameOfEvent = nameOfEvent;
         this.dateOfEvent = dateOfEvent;
+        this.days = days;
         this.locationName = locationName;
         this.lat_lng = lat_lng;
         this.distance = distance;
         this.ageMin = ageMin;
         this.ageMax = ageMax;
+        this.age = age;
         this.formOfVolunteering = formOfVolunteering;
         this.eventID = eventID;
         this.score = score;
+        this.typeOfVolunteering = typeOfVolunteering;
+        this.numberOfVolunteers = numberOfVolunteers;
+
 
 //        this.days = days;
 
@@ -39,6 +48,14 @@ public class Matches {
 
     public void setDateOfEvent(String dateOfEvent) {
         this.dateOfEvent = dateOfEvent;
+    }
+
+    public ArrayList<String> getDays() {
+        return days;
+    }
+
+    public void setDays(ArrayList<String> days) {
+        this.days = days;
     }
 
     public String getLocationName() {
@@ -62,7 +79,15 @@ public class Matches {
     }
 
     public void setDistance(String distance) {
-        this.distance = distance;
+        this.distance = distance + "km away";
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getAgeMin() {
@@ -87,6 +112,22 @@ public class Matches {
 
     public void setFormOfVolunteering(String formOfVolunteering) {
         this.formOfVolunteering = formOfVolunteering;
+    }
+
+    public String getTypeOfVolunteering() {
+        return typeOfVolunteering;
+    }
+
+    public void setTypeOfVolunteering(String typeOfVolunteering) {
+        this.typeOfVolunteering = typeOfVolunteering;
+    }
+
+    public String getNumberOfVolunteers() {
+        return numberOfVolunteers;
+    }
+
+    public void setNumberOfVolunteers() {
+        this.numberOfVolunteers = numberOfVolunteers;
     }
 
     public String getEventID() {

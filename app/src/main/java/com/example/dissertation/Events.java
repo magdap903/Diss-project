@@ -4,20 +4,24 @@ import java.util.ArrayList;
 
 public class Events {
 
-    private String nameOfEvent, dateOfEvent, locationName, lat_lng, formOfVolunteering, eventID;
-//    private ArrayList days;
+    private String nameOfEvent, dateOfEvent, locationName, lat_lng, formOfVolunteering, typeOfVolunteering,
+            eventID, ageMin, ageMax;
+    private ArrayList<String> daysOfTheWeek;
 
     public Events() {}
 
-    public Events(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng,
-                  String formOfVolunteering, String eventID) {
+    public Events(String nameOfEvent, String dateOfEvent, String locationName, String lat_lng, String typeOfVolunteering,
+                  String formOfVolunteering, String eventID, String ageMin, String ageMax, ArrayList<String> daysOfTheWeek) {
         this.nameOfEvent = nameOfEvent;
         this.dateOfEvent = dateOfEvent;
         this.locationName = locationName;
         this.lat_lng = lat_lng;
+        this.typeOfVolunteering = typeOfVolunteering;
         this.formOfVolunteering = formOfVolunteering;
         this.eventID = eventID;
-//        this.days = days;
+        this.ageMin = ageMin;
+        this.ageMax = ageMax;
+        this.daysOfTheWeek = daysOfTheWeek;
 
     }
 
@@ -61,6 +65,14 @@ public class Events {
         this.formOfVolunteering = formOfVolunteering;
     }
 
+    public String getTypeOfVolunteering() {
+        return typeOfVolunteering;
+    }
+
+    public void setTypeOfVolunteering(String typeOfVolunteering) {
+        this.typeOfVolunteering = typeOfVolunteering;
+    }
+
     public String getEventID() {
         return eventID;
     }
@@ -69,13 +81,29 @@ public class Events {
         this.eventID = eventID;
     }
 
-//    public ArrayList getDays() {
-//        return days;
-//    }
-//
-//    public void setDays(ArrayList days) {
-//        this.days = days;
-//    }
+    public String getAgeMin() {
+        return ageMin;
+    }
+
+    public void setAgeMin(String ageMin) {
+        this.ageMin = ageMin;
+    }
+
+    public String getAgeMax() {
+        return ageMax;
+    }
+
+    public void setAgeMax(String ageMax) {
+        this.ageMax = ageMax;
+    }
+
+    public ArrayList<String> getDaysOfTheWeek() {
+        return daysOfTheWeek;
+    }
+
+    public void setDaysOfTheWeek(ArrayList<String> daysOfTheWeek) {
+        this.daysOfTheWeek = daysOfTheWeek;
+    }
 
 
 }

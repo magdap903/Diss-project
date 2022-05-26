@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#59BFBFBF"
     tools:context=".AccountVolunteer">
 
     <ScrollView
@@ -27,6 +28,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="SignOut"
+                android:background="@drawable/buttons"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="First Name"
+                android:text="First and Last Name"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,7 @@
                 android:text="Last Name"
                 android:textSize="30sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/textView26" />
 
@@ -79,8 +82,8 @@
                 android:id="@+id/textView29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:text="Update Constraints"
                 android:textSize="25sp"
                 android:textStyle="bold"
@@ -104,9 +107,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView30" >
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView30">
 
                 <TextView
                     android:id="@+id/locationAcc"
@@ -132,10 +135,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="40sp"
                 android:layout_marginLeft="10sp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10sp"
-                android:layout_marginTop="12dp"
-                android:visibility="gone"
                 android:background="@android:color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
                 <fragment
@@ -161,12 +164,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView31" >
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView31">
 
                 <TextView
-                    android:id="@+id/ldistanceAcc"
+                    android:id="@+id/distanceAcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -191,11 +194,11 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:enabled="true"
-                android:visibility="gone"
                 android:stepSize="5"
                 android:value="20"
                 android:valueFrom="0"
                 android:valueTo="200"
+                android:visibility="gone"
                 app:labelBehavior="floating"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
@@ -218,9 +221,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView32" >
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView32">
 
                 <TextView
                     android:id="@+id/formAcc"
@@ -273,7 +276,7 @@
                 android:layout_marginTop="10dp"
                 android:text="age"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView33"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
             <TextView
                 android:id="@+id/textView34"
@@ -291,9 +294,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView30" >
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView30">
 
                 <TextView
                     android:id="@+id/typeAcc"
@@ -343,48 +346,62 @@
                 android:id="@+id/chooseDatesUP"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:text="Choose Dates"
                 android:textSize="15sp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.071"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView35" />
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/datesUP"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:visibility="gone"
-                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/chooseDatesUP">
 
-                <TextView
-                    android:id="@+id/dateFrom1UP"
-                    android:layout_width="160dp"
-                    android:layout_height="40dp"
-                    android:text="dd/mm/yyyy"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:id="@+id/d"
+                    android:layout_width="244dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/divid1UP"
-                    android:layout_width="30dp"
-                    android:layout_height="40dp" />
+                    <TextView
+                        android:id="@+id/dateFrom1UP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="dd/mm/yyyy"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/dateTo1UP"
-                    android:layout_width="155dp"
-                    android:layout_height="40dp"
-                    android:text="dd/mm/yyyy"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/dateTo1UP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="0dp"
+                        android:text="dd/mm/yyyy"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-            </LinearLayout>
+                </RelativeLayout>
+
+                <Switch
+                    android:id="@+id/switchDates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="change"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/weekUP"
@@ -392,12 +409,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/textView35" >
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/textView35">
+
+                <Switch
+                    android:id="@+id/switchWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="change"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                 <TextView
                     android:id="@+id/textView36"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="Please choose your available days of the week"
                     android:textSize="18sp" />
 
@@ -484,7 +511,6 @@
 
 
         </LinearLayout>
-
 
 
     </ScrollView>
